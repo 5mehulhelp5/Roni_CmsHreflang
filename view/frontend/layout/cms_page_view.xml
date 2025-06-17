@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+    Roni_CmsHreflang Module Declaration
+
+    @category  Roni
+    @package   Roni_CmsHreflang
+    @author    Roni Clei J Santos <roneclay@gmail.com>
+    @copyright Copyright (c) 2025 Roni Clei
+    @license   https://opensource.org/licenses/MIT MIT License
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="head.additional">
+            <block class="Roni\CmsHreflang\Block\Hreflang"
+                   name="cms.hreflang"/>
+        </referenceContainer>
+    </body>
+</page>
