@@ -150,3 +150,11 @@ Não é necessária nenhuma configuração manual. O módulo funciona automatica
 
 [MIT License](https://opensource.org/licenses/MIT)
 
+---
+
+## ☕ Support this project
+
+If this module helped you, consider supporting:
+
+- 🌎 [Buy Me a Coffee (global)](https://coff.ee/roneclay9)
+- 🇧🇷 Pix (Brazil): a3a7aea8-39c5-46b0-94cb-da030549eaa2
