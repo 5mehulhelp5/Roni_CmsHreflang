@@ -142,7 +142,7 @@ Não é necessária nenhuma configuração manual. O módulo funciona automatica
 
 **Roni Clei J Santos**\
 📧 [roneclay@gmail.com](mailto\:roneclay@gmail.com)\
-🔗 [LinkedIn](https://www.linkedin.com/in/roniclei) | [GitHub](https://github.com/roniclei)
+🔗 [LinkedIn](https://www.linkedin.com/in/roni-clei-santos/) | [GitHub](https://github.com/roneclay)
 
 ---
 
