@@ -1,105 +1,103 @@
-# 🏗️ Roni\_CmsHreflang
+# 🏗️ Roni_CmsHreflang
 
-## ✨ Descrição
+## ✨ Description
 
-O módulo **Roni\_CmsHreflang** foi desenvolvido para gerar automaticamente tags `<link rel="alternate" hreflang="...">` em páginas CMS do Magento 2, otimizando SEO internacional e assegurando que motores de busca entendam corretamente as versões regionais de uma mesma página.
+The **Roni_CmsHreflang** module automatically generates `<link rel="alternate" hreflang="...">` tags for CMS pages in Magento 2, enhancing international SEO and helping search engines correctly identify localized page versions.
 
-🔗 **Problema Resolvido:**\
-Por padrão, o Magento 2 não gera tags hreflang para páginas CMS. Isso prejudica lojas que operam em múltiplos idiomas ou regiões, impactando negativamente no SEO.
+🔗 **Problem Solved:**  
+By default, Magento 2 does not generate hreflang tags for CMS pages. This creates SEO issues for stores with multiple languages or regions.
 
-🚀 **Solução:**\
-O módulo identifica a página CMS atual, verifica quais store views estão associadas a ela e gera, de forma dinâmica, as tags hreflang correspondentes.
+🚀 **Solution:**  
+This module identifies the current CMS page, checks which store views are associated with it, and dynamically outputs the correct hreflang tags.
 
 ---
 
-## 📦 Estrutura e Arquitetura
+## 📦 Structure & Architecture
 
 - **Namespace:** `Roni\CmsHreflang`
-- **Padrão seguido:** PSR-12, SOLID, Magento Coding Standard
-- **Design Pattern:** Block Component, Dependency Injection, Fail-safe Logging
+- **Standards Followed:** PSR-12, SOLID, Magento Coding Standards
+- **Design Patterns:** Block Component, Dependency Injection, Fail-safe Logging
 
 ---
 
 ## 🔥 Features
 
-- ✔️ Geração automática de tags hreflang para páginas CMS.
-- ✔️ Suporte nativo a store views ilimitadas.
-- ✔️ Detecta configurações de URL (`use_store_code_in_url`).
-- ✔️ Considera configurações regionais (`general/locale/code`).
-- ✔️ Exclui páginas desativadas automaticamente.
-- ✔️ Loga erros sem quebrar a renderização da página.
+- ✔️ Automatically generates hreflang tags for CMS pages
+- ✔️ Supports unlimited store views
+- ✔️ Detects `use_store_code_in_url` settings
+- ✔️ Retrieves `general/locale/code` for accurate language-region formatting
+- ✔️ Skips inactive CMS pages
+- ✔️ Logs errors without breaking frontend rendering
 
 ---
 
-## 🔧 Como Funciona
+## 🔧 How It Works
 
-### ✅ Fluxo de Execução:
+### ✅ Execution Flow
 
-1. Verifica se a página atual é uma página CMS (`cms_page_view`).
-2. Obtém o **identifier** da página via bloco `cms_page`.
-3. Verifica se a página está ativa no store atual.
-4. Recupera todas as store views associadas a essa página (incluindo `All Store Views`).
-5. Para cada store:
-   - Valida se a página está ativa naquela store.
-   - Busca o locale (`pt_BR`, `en_US`), convertendo para o formato hreflang (`pt-br`).
-   - Verifica se o store code faz parte da URL (`web/url/use_store`).
-   - Monta a URL final da página para aquela store.
-   - Gera a tag hreflang no formato:
+1. Verifies if the current page is a CMS page (`cms_page_view`)
+2. Retrieves the **identifier** via the `cms_page` block
+3. Validates if the CMS page is active for the current store
+4. Fetches all store views assigned to this page (including `All Store Views`)
+5. For each store:
+   - Validates if the page is active in that store
+   - Retrieves locale configuration (e.g., `pt_BR`, `en_US`) and converts to hreflang format (`pt-BR`)
+   - Checks if store code is included in URLs (`web/url/use_store`)
+   - Builds the final URL for that store
+   - Outputs the hreflang tag:
 
 ```html
-<link rel="alternate" hreflang="pt-BR" href="https://example.com/pt_br/loja-sobre-nos"/>
+<link rel="alternate" hreflang="pt-BR" href="https://example.com/pt_br/about-us" />
 ```
 
-6. Renderiza as tags no head da página.
+---
+
+## 🛠️ Technologies & Best Practices Used
+
+| Item                          | Strategy / Decision                                   |
+|------------------------------|--------------------------------------------------------|
+| ✔️ Dependency Injection       | Reduces coupling, improves testability                |
+| ✔️ Fail-safe Error Handling   | All errors are logged without exposing them to users  |
+| ✔️ PSR-12 + Magento Standards | Clean, readable, and standardized code                |
+| ✔️ Single Responsibility      | Each method has a clear and single responsibility     |
+| ✔️ Clean Code                 | Semantic names, small methods, no hardcoded strings   |
+| ✔️ ResourceModel for DB       | Fast and accurate access to `cms_page_store` table    |
+| ✔️ Config Awareness           | Fully respects Magento's store and locale settings    |
 
 ---
 
-## 🛠️ Tecnologias e Boas Práticas Aplicadas
+## 🏟️ Main Technical Component
 
-| Item                          | Estratégia/Decisão                                    |
-| ----------------------------- | ----------------------------------------------------- |
-| ✔️ Dependency Injection       | Redução de acoplamento, melhor testabilidade.         |
-| ✔️ Fail-safe Error Handling   | Nenhum erro quebra o site, tudo é registrado via log. |
-| ✔️ PSR-12 + Magento Standards | Código limpo, legível e aderente às boas práticas.    |
-| ✔️ Single Responsibility      | Cada método possui uma responsabilidade clara.        |
-| ✔️ Clean Code                 | Nomes semânticos, funções pequenas e bem definidas.   |
-| ✔️ Banco via Resource Model   | Consulta otimizada na `cms_page_store`.               |
-| ✔️ Config Awareness           | Sensível às configs de URL e locale de cada store.    |
+- **Block:** `Roni\CmsHreflang\Block\Hreflang`  
+  👉 Responsible for all logic and rendering of hreflang tags.
 
 ---
 
-## 🏟️ Estrutura Técnica Principal
+## 🏦 Architectural Decisions
 
-- **Block:** `Roni\CmsHreflang\Block\Hreflang`\
-  👉 Responsável por todo o processamento e geração das tags.
+- **Why not use `PageRepository::getById()` directly?**  
+  That method is limited when called across stores. `CollectionFactory` ensures proper filtering by store scope.
 
----
+- **Why query the `cms_page_store` table directly?**  
+  The repository API doesn't provide reliable access to page-store mapping. SQL is faster and more accurate.
 
-## 🏦 Decisões Arquiteturais
-
-- **Por que não usar diretamente PageRepository?**\
-  O método `getById()` do `PageRepositoryInterface` no Magento é limitado quando usado fora do contexto da store atual. Por isso, utilizei o `CollectionFactory` para garantir que a verificação de status (ativa ou não) seja feita corretamente por store.
-
-- **Por que consultar diretamente a tabela **`cms_page_store`**?**\
-  O repositório não oferece uma API eficiente para mapear stores de uma página. A consulta direta torna o processo mais performático e confiável.
-
-- **Por que Logger em todos os pontos críticos?**\
-  Para garantir que erros de configuração, problemas de dados ou exceções não afetem a renderização da página, tudo é capturado e reportado nos logs do Magento.
+- **Why log errors instead of throwing?**  
+  To avoid frontend failures and ensure proper diagnostics in Magento’s log system.
 
 ---
 
-## 🏠 Instalação
+## 🏠 Installation
 
-Via composer local:
+### Option 1: Via Composer (local path)
 
 ```bash
 composer require roni/module-cms-hreflang
 ```
 
-Ou manualmente:
+### Option 2: Manual Installation
 
-1. Copie o módulo para `app/code/Roni/CmsHreflang`.
-2. Execute:
+1. Copy the module to: `app/code/Roni/CmsHreflang`
+2. Run the following commands:
 
 ```bash
 bin/magento setup:upgrade
@@ -109,44 +107,45 @@ bin/magento cache:flush
 
 ---
 
-## ⚙️ Configuração
+## ⚙️ Configuration
 
-Não é necessária nenhuma configuração manual. O módulo funciona automaticamente nas páginas CMS que possuem:
+No manual setup required. The module works automatically for CMS pages that:
 
-- Página ativa no store view
-- URL amigável configurada corretamente
+- Are active in at least one store view
+- Have friendly URLs set
+- Are associated with specific store views (or all stores)
 
 ---
 
-## 🧠 Exemplos de Uso
+## 🧠 Example
 
-### Página CMS "sobre-nos" em 3 store views:
+### CMS Page "about-us" across 3 store views:
 
-| Store View | Locale | URL                                                                          |
-|------------|--------|------------------------------------------------------------------------------|
-| pt\_br     | pt-BR  | [https://example.com/pt_br/sobre-nos](https://example.com/deafult/sobre-nos) |
-| en\_us     | en-US  | [https://example.com/en_us/sobre-nos](https://example.com/en_us/sobre-nos)   |
-| en\_gb     | en-GB  | [https://example.com/en_gb/sobre-nos](https://example.com/en_gb/sobre-nos)   |
+| Store View | Locale | URL                                           |
+|------------|--------|-----------------------------------------------|
+| pt_br      | pt-BR  | `https://example.com/pt_br/about-us`          |
+| en_us      | en-US  | `https://example.com/en_us/about-us`          |
+| en_gb      | en-GB  | `https://example.com/en_gb/about-us`          |
 
-**Tags geradas:**
+**Generated Tags:**
 
 ```html
-<link rel="alternate" hreflang="pt-BR" href="https://example.com/pt_br/sobre-nos"/>
-<link rel="alternate" hreflang="en-US" href="https://example.com/en_US/sobre-nos"/>
-<link rel="alternate" hreflang="es-GB" href="https://example.com/es_GB/sobre-nos"/>
+<link rel="alternate" hreflang="pt-BR" href="https://example.com/pt_br/about-us" />
+<link rel="alternate" hreflang="en-US" href="https://example.com/en_us/about-us" />
+<link rel="alternate" hreflang="en-GB" href="https://example.com/en_gb/about-us" />
 ```
 
 ---
 
-## 👨‍💼 Autor
+## 👨‍💼 Author
 
-**Roni Clei J Santos**\
-📧 [roneclay@gmail.com](mailto\:roneclay@gmail.com)\
+**Roni Clei J Santos**  
+📧 [roneclay@gmail.com](mailto:roneclay@gmail.com)  
 🔗 [LinkedIn](https://www.linkedin.com/in/roni-clei-santos/) | [GitHub](https://github.com/roneclay)
 
 ---
 
-## 📝 Licença
+## 📝 License
 
 [MIT License](https://opensource.org/licenses/MIT)
 
@@ -157,4 +156,4 @@ Não é necessária nenhuma configuração manual. O módulo funciona automatica
 If this module helped you, consider supporting:
 
 - 🌎 [Buy Me a Coffee (global)](https://coff.ee/roneclay9)
-- 🇧🇷 Pix (Brazil): a3a7aea8-39c5-46b0-94cb-da030549eaa2
+- 🇧🇷 Pix (Brazil): `a3a7aea8-39c5-46b0-94cb-da030549eaa2`
