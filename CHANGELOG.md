@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-10-24
+## [2.0.0] - 2026-10-25
 
 Rebuilt release. 1.0.0 emitted links that answered 404 as soon as "Add Store Code to Urls" was on, left the CMS home page
 without any link, repeated locales across websites, listed disabled store views and linked pages that share an identifier
