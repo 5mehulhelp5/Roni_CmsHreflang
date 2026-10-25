@@ -10,6 +10,7 @@ namespace Roni\CmsHreflang\ViewModel;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Roni\CmsHreflang\Api\Data\AlternateInterface;
@@ -19,9 +20,16 @@ use Roni\CmsHreflang\Api\HreflangProviderInterface;
  * Hreflang alternates of the CMS page being viewed, or of the CMS home page.
  *
  * The page is the one the CMS controller loaded for the request (the same shared instance the CMS page block reads).
+ * The CMS home page (route cms/index/index) and a page viewed at its own URL (cms/page/view) both add the
+ * `cms_page_view` layout handle; the action tells them apart.
  */
 class Hreflang implements ArgumentInterface
 {
+    /**
+     * Action of the CMS home page route (cms/index/index); a page is viewed through cms/page/view.
+     */
+    private const HOME_ACTION = 'index';
+
     /**
      * @var AlternateInterface[]|null
      */
@@ -31,13 +39,13 @@ class Hreflang implements ArgumentInterface
      * @param HreflangProviderInterface $provider
      * @param StoreManagerInterface $storeManager
      * @param PageInterface $page
-     * @param bool $home Describe the CMS home page instead of the page being viewed
+     * @param RequestInterface $request
      */
     public function __construct(
         private readonly HreflangProviderInterface $provider,
         private readonly StoreManagerInterface $storeManager,
         private readonly PageInterface $page,
-        private readonly bool $home = false
+        private readonly RequestInterface $request
     ) {
     }
 
@@ -53,7 +61,7 @@ class Hreflang implements ArgumentInterface
             $identifier = (string) $this->page->getIdentifier();
 
             $this->alternates = match (true) {
-                $this->home => $this->provider->getForHome($storeId),
+                $this->request->getActionName() === self::HOME_ACTION => $this->provider->getForHome($storeId),
                 $identifier !== '' => $this->provider->getForPage($identifier, $storeId),
                 default => [],
             };

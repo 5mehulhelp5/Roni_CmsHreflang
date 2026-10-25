@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Roni\CmsHreflang\Test\Unit\ViewModel;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +35,11 @@ class HreflangTest extends TestCase
      */
     private PageInterface $page;
 
+    /**
+     * @var RequestInterface&MockObject
+     */
+    private RequestInterface $request;
+
     protected function setUp(): void
     {
         $this->provider = $this->createMock(HreflangProviderInterface::class);
@@ -42,6 +48,13 @@ class HreflangTest extends TestCase
         $store->method('getId')->willReturn('2');
         $this->storeManager->method('getStore')->willReturn($store);
         $this->page = $this->createMock(PageInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->request->method('getActionName')->willReturn('view');
+    }
+
+    private function viewModel(): Hreflang
+    {
+        return new Hreflang($this->provider, $this->storeManager, $this->page, $this->request);
     }
 
     public function testAsksForTheAlternatesOfThePageBeingViewedInTheCurrentStoreView(): void
@@ -50,7 +63,7 @@ class HreflangTest extends TestCase
         $this->page->method('getIdentifier')->willReturn('about-us');
         $this->provider->expects(self::once())->method('getForPage')->with('about-us', 2)->willReturn([$alternate]);
 
-        $viewModel = new Hreflang($this->provider, $this->storeManager, $this->page);
+        $viewModel = $this->viewModel();
 
         self::assertSame([$alternate], $viewModel->getAlternates());
     }
@@ -60,8 +73,10 @@ class HreflangTest extends TestCase
         $alternate = new Alternate('pt-BR', 'http://example.test/pt/', 30);
         $this->provider->expects(self::once())->method('getForHome')->with(2)->willReturn([$alternate]);
         $this->provider->expects(self::never())->method('getForPage');
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->request->method('getActionName')->willReturn('index');
 
-        $viewModel = new Hreflang($this->provider, $this->storeManager, $this->page, true);
+        $viewModel = $this->viewModel();
 
         self::assertSame([$alternate], $viewModel->getAlternates());
     }
@@ -71,7 +86,7 @@ class HreflangTest extends TestCase
         $this->page->method('getIdentifier')->willReturn(null);
         $this->provider->expects(self::never())->method('getForPage');
 
-        $viewModel = new Hreflang($this->provider, $this->storeManager, $this->page);
+        $viewModel = $this->viewModel();
 
         self::assertSame([], $viewModel->getAlternates());
     }
@@ -81,7 +96,7 @@ class HreflangTest extends TestCase
         $this->page->method('getIdentifier')->willReturn('about-us');
         $this->provider->expects(self::once())->method('getForPage')->willReturn([]);
 
-        $viewModel = new Hreflang($this->provider, $this->storeManager, $this->page);
+        $viewModel = $this->viewModel();
         $viewModel->getAlternates();
         $viewModel->getAlternates();
     }
@@ -95,7 +110,7 @@ class HreflangTest extends TestCase
             new Alternate('x-default', 'http://example.test/about-us', 5),
         ]);
 
-        $viewModel = new Hreflang($this->provider, $this->storeManager, $this->page);
+        $viewModel = $this->viewModel();
 
         self::assertSame(['cms_p_5', 'cms_p_14'], $viewModel->getIdentities());
     }

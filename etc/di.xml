@@ -7,11 +7,4 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Roni\CmsHreflang\Api\HreflangProviderInterface" type="Roni\CmsHreflang\Model\HreflangProvider"/>
-
-    <!-- The same ViewModel, told to describe the CMS home page instead of the page being viewed -->
-    <virtualType name="Roni\CmsHreflang\ViewModel\HomeHreflang" type="Roni\CmsHreflang\ViewModel\Hreflang">
-        <arguments>
-            <argument name="home" xsi:type="boolean">true</argument>
-        </arguments>
-    </virtualType>
 </config>
