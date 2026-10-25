@@ -10,7 +10,7 @@ namespace Roni\CmsHreflang\ViewModel;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Roni\CmsHreflang\Api\Data\AlternateInterface;
@@ -20,15 +20,14 @@ use Roni\CmsHreflang\Api\HreflangProviderInterface;
  * Hreflang alternates of the CMS page being viewed, or of the CMS home page.
  *
  * The page is the one the CMS controller loaded for the request (the same shared instance the CMS page block reads).
- * The CMS home page (route cms/index/index) and a page viewed at its own URL (cms/page/view) both add the
- * `cms_page_view` layout handle; the action tells them apart.
+ * The CMS home page (cms_index_index), a page viewed at its own URL (cms_page_view) and the 404 page
+ * (cms_noroute_index) all add the `cms_page_view` layout handle. The full action name tells them apart, and the 404
+ * page gets no links.
  */
 class Hreflang implements ArgumentInterface
 {
-    /**
-     * Action of the CMS home page route (cms/index/index); a page is viewed through cms/page/view.
-     */
-    private const HOME_ACTION = 'index';
+    private const HOME_ACTION = 'cms_index_index';
+    private const PAGE_ACTION = 'cms_page_view';
 
     /**
      * @var AlternateInterface[]|null
@@ -39,13 +38,13 @@ class Hreflang implements ArgumentInterface
      * @param HreflangProviderInterface $provider
      * @param StoreManagerInterface $storeManager
      * @param PageInterface $page
-     * @param RequestInterface $request
+     * @param Http $request
      */
     public function __construct(
         private readonly HreflangProviderInterface $provider,
         private readonly StoreManagerInterface $storeManager,
         private readonly PageInterface $page,
-        private readonly RequestInterface $request
+        private readonly Http $request
     ) {
     }
 
@@ -60,9 +59,9 @@ class Hreflang implements ArgumentInterface
             $storeId = (int) $this->storeManager->getStore()->getId();
             $identifier = (string) $this->page->getIdentifier();
 
-            $this->alternates = match (true) {
-                $this->request->getActionName() === self::HOME_ACTION => $this->provider->getForHome($storeId),
-                $identifier !== '' => $this->provider->getForPage($identifier, $storeId),
+            $this->alternates = match ($this->request->getFullActionName()) {
+                self::HOME_ACTION => $this->provider->getForHome($storeId),
+                self::PAGE_ACTION => $identifier !== '' ? $this->provider->getForPage($identifier, $storeId) : [],
                 default => [],
             };
         }

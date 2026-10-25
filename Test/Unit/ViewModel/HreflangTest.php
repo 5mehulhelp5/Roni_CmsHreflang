@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Roni\CmsHreflang\Test\Unit\ViewModel;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,9 +36,9 @@ class HreflangTest extends TestCase
     private PageInterface $page;
 
     /**
-     * @var RequestInterface&MockObject
+     * @var Http&MockObject
      */
-    private RequestInterface $request;
+    private Http $request;
 
     protected function setUp(): void
     {
@@ -48,8 +48,8 @@ class HreflangTest extends TestCase
         $store->method('getId')->willReturn('2');
         $this->storeManager->method('getStore')->willReturn($store);
         $this->page = $this->createMock(PageInterface::class);
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->request->method('getActionName')->willReturn('view');
+        $this->request = $this->createMock(Http::class);
+        $this->request->method('getFullActionName')->willReturn('cms_page_view');
     }
 
     private function viewModel(): Hreflang
@@ -73,12 +73,23 @@ class HreflangTest extends TestCase
         $alternate = new Alternate('pt-BR', 'http://example.test/pt/', 30);
         $this->provider->expects(self::once())->method('getForHome')->with(2)->willReturn([$alternate]);
         $this->provider->expects(self::never())->method('getForPage');
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->request->method('getActionName')->willReturn('index');
+        $this->request = $this->createMock(Http::class);
+        $this->request->method('getFullActionName')->willReturn('cms_index_index');
 
         $viewModel = $this->viewModel();
 
         self::assertSame([$alternate], $viewModel->getAlternates());
+    }
+
+    public function testNoAlternatesOnTheNoRoutePage(): void
+    {
+        $this->page->method('getIdentifier')->willReturn('no-route');
+        $this->provider->expects(self::never())->method('getForPage');
+        $this->provider->expects(self::never())->method('getForHome');
+        $this->request = $this->createMock(Http::class);
+        $this->request->method('getFullActionName')->willReturn('cms_noroute_index');
+
+        self::assertSame([], $this->viewModel()->getAlternates());
     }
 
     public function testNoAlternatesWhenThePageHasNoIdentifier(): void
