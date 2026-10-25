@@ -1,11 +1,42 @@
 {
     "name": "roni/module-cms-hreflang",
-    "description": "Add hreflang meta tags for CMS pages shared across multiple store views",
+    "description": "Magento 2 / Adobe Commerce module that adds hreflang alternate links (and x-default) to CMS pages and the CMS home page across store views.",
     "type": "magento2-module",
-    "version": "1.0.0",
+    "license": "MIT",
+    "keywords": [
+        "magento2",
+        "adobe-commerce",
+        "hreflang",
+        "seo",
+        "cms",
+        "multistore"
+    ],
+    "homepage": "https://github.com/roni-clei-santos/Roni_CmsHreflang",
+    "authors": [
+        {
+            "name": "Roni Clei Santos",
+            "homepage": "https://github.com/roni-clei-santos",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/roni-clei-santos/Roni_CmsHreflang/issues",
+        "source": "https://github.com/roni-clei-santos/Roni_CmsHreflang"
+    },
     "require": {
-        "php": "^7.4 || ^8.1",
-        "magento/framework": "*"
+        "php": "~8.2.0||~8.3.0",
+        "magento/framework": "^103.0.7",
+        "magento/module-backend": "^102.0.7",
+        "magento/module-cms": "^104.0.7",
+        "magento/module-config": "^101.2.7",
+        "magento/module-store": "^101.1.7"
+    },
+    "require-dev": {
+        "bitexpert/phpstan-magento": "^0.32",
+        "magento/magento-coding-standard": "^38",
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^1.12",
+        "phpunit/phpunit": "^10.5"
     },
     "autoload": {
         "files": [
@@ -14,5 +45,61 @@
         "psr-4": {
             "Roni\\CmsHreflang\\": ""
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Roni\\CmsHreflang\\Test\\": "Test/",
+            "Magento\\CodeMessDetector\\": "dev/phpmd/CodeMessDetector/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/.github",
+            "/Test",
+            "/e2e",
+            "/docs",
+            "/phpunit.xml.dist",
+            "/phpstan.neon.dist",
+            "/phpcs.xml.dist",
+            "/dev",
+            "/.githooks",
+            "/CLAUDE.md"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "magento/composer-dependency-version-audit-plugin": true,
+            "magento/composer-root-update-plugin": true,
+            "magento/magento-composer-installer": true,
+            "mage-os/composer-dependency-version-audit-plugin": true,
+            "mage-os/composer-root-update-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "coverage": [
+            "@php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-clover build/clover.xml",
+            "@php dev/ci/check-coverage.php build/clover.xml 70"
+        ],
+        "phpcs": "phpcs",
+        "phpmd": "phpmd Api,Block,Model,ViewModel text dev/phpmd/ruleset.xml",
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "blacklist": "@php dev/ci/blacklist.php",
+        "check-tests-exist": "@php dev/ci/check-tests-exist.php",
+        "check-scope": "@php dev/ci/check-scope-config.php",
+        "check": [
+            "@blacklist",
+            "@phpcs",
+            "@phpmd",
+            "@phpcpd",
+            "@phpstan",
+            "@check-tests-exist",
+            "@check-scope",
+            "@coverage"
+        ],
+        "phpcpd": "bash dev/ci/phpcpd.sh Api Block Model ViewModel"
     }
 }

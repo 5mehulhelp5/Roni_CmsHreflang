@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Roni Clei Santos. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="head.additional">
+            <block name="roni.cms.hreflang"
+                   class="Roni\CmsHreflang\Block\Hreflang"
+                   template="Roni_CmsHreflang::hreflang.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Roni\CmsHreflang\ViewModel\HomeHreflang</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

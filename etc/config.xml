@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Roni Clei Santos. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <roni_cms_hreflang>
+            <general>
+                <include_other_websites>0</include_other_websites>
+            </general>
+        </roni_cms_hreflang>
+    </default>
+</config>
