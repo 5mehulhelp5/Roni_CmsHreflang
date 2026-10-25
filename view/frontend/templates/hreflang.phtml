@@ -1,0 +1,23 @@
+<?php
+/**
+ * Copyright © Roni Clei Santos. All rights reserved.
+ * See LICENSE for license details.
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Roni\CmsHreflang\ViewModel\Hreflang;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var Hreflang $viewModel */
+
+$viewModel = $block->getData('view_model');
+?>
+<?php foreach ($viewModel->getAlternates() as $alternate): ?>
+<link rel="alternate"
+      hreflang="<?= $escaper->escapeHtmlAttr($alternate->getHreflang()) ?>"
+      href="<?= $escaper->escapeUrl($alternate->getUrl()) ?>"/>
+<?php endforeach; ?>

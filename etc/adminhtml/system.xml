@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Roni Clei Santos. All rights reserved.
+ * See LICENSE for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="roni" translate="label" sortOrder="110">
+            <label>Roni</label>
+        </tab>
+        <section id="roni_cms_hreflang" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>CMS Hreflang</label>
+            <tab>roni</tab>
+            <resource>Roni_CmsHreflang::config_cms_hreflang</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>General</label>
+                <field id="include_other_websites" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Include store views of other websites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>By default the hreflang links list only the store views of the current website. Turn it on when your websites are the same brand in other countries or languages; each locale is still listed once, current website first.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
