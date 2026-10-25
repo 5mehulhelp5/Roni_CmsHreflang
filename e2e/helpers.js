@@ -72,6 +72,7 @@ export async function shotAlternates(page, name, url, alternates, answers) {
   }).join('');
   const tags = alternates
     .map(([hreflang, href]) => escape(`<link rel="alternate" hreflang="${hreflang}" href="${href}"/>`)).join('\n');
+  await page.setViewportSize({ width: 1100, height: 520 });
   await page.setContent(`<!doctype html><meta charset="utf-8"><style>
     body{font:14px/1.5 -apple-system,Segoe UI,sans-serif;margin:24px;color:#1d2433}
     h1{font-size:17px;margin:0 0 12px} pre{background:#0f1722;color:#d7e3f4;padding:14px;border-radius:8px;font-size:13px}
@@ -79,7 +80,6 @@ export async function shotAlternates(page, name, url, alternates, answers) {
     tr.ok td:nth-child(3){color:#0a7a3d;font-weight:600} tr.bad td:nth-child(3){color:#b3261e;font-weight:700}
   </style><h1>${escape(url)}</h1><pre>${tags}</pre>
   <table><tr><th>hreflang</th><th>URL</th><th>HTTP</th><th>Page title</th></tr>${rows}</table>`);
-  await page.setViewportSize({ width: 1100, height: 600 });
   await shot(page, name);
 }
 
