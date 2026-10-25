@@ -95,11 +95,13 @@ This is a documented limitation; relating pages with different keys would need a
 
 ### Caching
 
-The links are part of the cached page. The cache tags of the pages behind the links are added to it, so editing, disabling or
-changing the store views of any of those pages refreshes the cached page. What is read from the configuration is not tracked:
-after changing a **locale**, a **base URL**, the **status of a store view**, this module's setting, or **creating a new page**
-that shares an identifier with an existing one, flush the cache (`bin/magento cache:flush`), as Magento asks for any
-configuration change.
+The links are part of the cached page. The cache tags of the pages behind the links are added to it, so editing or disabling
+any page of the set refreshes the cached page. Two things are not tracked, and need `bin/magento cache:flush`, as Magento asks for any
+configuration change:
+
+- a page that **joins** the set: a new page that shares the URL key of an existing one, or a disabled page that is enabled
+  again (the cached pages do not know it exists);
+- what is read from the configuration: a **locale**, a **base URL**, the **status of a store view**, or this module's setting.
 
 ## Screenshots
 
